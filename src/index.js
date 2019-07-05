@@ -1,4 +1,5 @@
 window.onload = () => {
+const PosterBandungJS = require('./assets/img/poster-bandungjs.jpeg')
   const canvas = document.getElementById('jalu')
   const ctx = canvas.getContext('2d')
   const CANVAS_WIDTH = canvas.width
