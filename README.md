@@ -2,6 +2,12 @@
 
 Official repository for [meetup bandungjs #21](https://www.meetup.com/BandungJS/events/262832383/).
 
+## Live
+
+https://elated-williams-cd16dd.netlify.com/
+
+[!qr-code](./docs/qr-code.png)
+
 ## How to start?
 
 + please `fork` this repo, and `clone` from your account.
