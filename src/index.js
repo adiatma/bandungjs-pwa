@@ -1,3 +1,5 @@
+const mainCss = require('./assets/css/main.css')
+
 const canvas = document.getElementById('jalu')
 const ctx = canvas.getContext('2d')
 const CANVAS_WIDTH = canvas.width
