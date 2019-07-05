@@ -1,5 +1,4 @@
 window.onload = () => {
-const PosterBandungJS = require('./assets/img/poster-bandungjs.jpeg')
   const canvas = document.getElementById('jalu')
   const ctx = canvas.getContext('2d')
   const CANVAS_WIDTH = canvas.width
@@ -12,25 +11,25 @@ const PosterBandungJS = require('./assets/img/poster-bandungjs.jpeg')
   const DEGREE = Math.PI/180
 
   const sprite = new Image()
-  sprite.src = './images/sprite.png'
+  sprite.src = require('./assets/images/sprite.png')
 
   const BG_MUSIC = new Audio()
-  BG_MUSIC.src = 'audio/bg_music.mp3'
+  BG_MUSIC.src = require('./assets/audio/bg_music.mp3')
 
   const SCORE_S = new Audio()
-  SCORE_S.src = "audio/point.mp3"
+  SCORE_S.src = require('./assets/audio/point.mp3')
 
   const FLAP = new Audio()
-  FLAP.src = "audio/flap.mp3"
+  FLAP.src = require('./assets/audio/flap.mp3')
 
   const HIT = new Audio()
-  HIT.src = "audio/sfx_hit.wav"
+  HIT.src = require('./assets/audio/sfx_hit.wav')
 
   const SWOOSHING = new Audio()
-  SWOOSHING.src = "audio/sfx_swooshing.wav"
+  SWOOSHING.src = require('./assets/audio/sfx_swooshing.wav')
 
   const DIE = new Audio()
-  DIE.src = "audio/die.mp3"
+  DIE.src = require('./assets/audio/die.mp3')
 
   const state = {
       current : 0,
