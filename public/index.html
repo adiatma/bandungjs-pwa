@@ -5,8 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title><%= htmlWebpackPlugin.options.title %></title>
+  <style>
+      html, body{
+        padding: 0;
+        margin: 0;
+      }
+      .canvas{
+        border: 1px solid #333;
+        width: 100%;
+        height: 100vh
+      }
+  </style>
 </head>
 <body>
-  
+  <canvas class="canvas" id="jalu" width="320" height="480">
+    your browser not supported masbro!
+  </canvas>
 </body>
 </html>
