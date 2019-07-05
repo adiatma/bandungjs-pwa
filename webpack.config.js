@@ -59,6 +59,29 @@ function webpackConfig(environment) {
             },
           ],
         },
+        {
+          test: /\.css$/,
+          exclude: /\.useable\.css$/,
+          use: [
+            {
+              loader: 'style-loader',
+            },
+            {
+              loader: 'css-loader',
+            },
+          ],
+        },
+        {
+          test: /\.useable\.css$/,
+          use: [
+            {
+              loader: 'style-loader/useable',
+            },
+            {
+              loader: 'css-loader',
+            },
+          ],
+        },
       ],
     },
     plugins: [
