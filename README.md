@@ -6,7 +6,7 @@ Official repository for [meetup bandungjs #21](https://www.meetup.com/BandungJS/
 
 https://elated-williams-cd16dd.netlify.com/
 
-[!qr-code](./docs/qr-code.png)
+![qr-code](./docs/qr-code.png)
 
 ## How to start?
 
