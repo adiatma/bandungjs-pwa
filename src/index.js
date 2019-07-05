@@ -1,5 +1,10 @@
-const globalStyle = require('./assets/css/main.css')
-const PosterBandungJS = require('./assets/img/poster-bandungjs.jpeg')
+const canvas = document.getElementById('jalu')
+const ctx = canvas.getContext('2d')
+const CANVAS_WIDTH = canvas.width
+const CANVAS_HEIGHT = canvas.height
+
+const PRIMARY_COLOR = '#f58220'
+const SECONDARY_COLOR = 'white'
 
 let frames = 0
 const DEGREE = Math.PI/180
