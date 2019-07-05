@@ -1,6 +1,10 @@
 # NodeJS
 node_modules
 *.log
+*.lock
 
 # OSX
 .DS_Store
+
+# Local
+build

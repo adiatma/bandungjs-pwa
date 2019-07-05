@@ -3,5 +3,17 @@
   "version": "1.0.0",
   "main": "index.js",
   "author": "adiatma <adiatma.kamaarudin@ralali.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "html-webpack-plugin": "^3.2.0",
+    "serve": "^11.0.2",
+    "webpack": "^4.35.2",
+    "webpack-cli": "^3.3.5",
+    "webpack-dev-server": "^3.7.2"
+  },
+  "scripts": {
+    "start": "webpack-dev-server --env.mode=development --config webpack.config",
+    "build": "webpack --env.mode=production --config webpack.config",
+    "serve": "serve -s build"
+  }
 }
