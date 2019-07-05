@@ -21,6 +21,8 @@ function createHTML({title, template}) {
  * @return {object}
  */
 function webpackConfig(environment) {
+  const isModeProduction = environment.mode === 'production'
+
   return {
     mode: environment.mode,
     devServer: {
@@ -30,7 +32,34 @@ function webpackConfig(environment) {
     entry: appResolve('src/index.js'),
     output: {
       path: appResolve('build'),
-      filename: '[name].js',
+      filename(name) {
+        if (isModeProduction) {
+          return '[name].[hash].bundle.js'
+        }
+
+        return '[name].bundle.js'
+      },
+    },
+    module: {
+      rules: [
+        {
+          test: /\.(png|jpe?g|gif)$/,
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                name(file) {
+                  if (isModeProduction) {
+                    return '[hash].[ext]'
+                  }
+
+                  return '[path][name].[ext]'
+                },
+              },
+            },
+          ],
+        },
+      ],
     },
     plugins: [
       createHTML({
