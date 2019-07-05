@@ -8,7 +8,7 @@ body {
   margin: 0;
 }
 
-.canvas {
+#app {
   border: 1px solid var(--black);
   width: 100%;
   height: 100vh;
