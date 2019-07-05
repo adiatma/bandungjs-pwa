@@ -4,7 +4,7 @@ Official repository for [meetup bandungjs #21](https://www.meetup.com/BandungJS/
 
 ## Live
 
-https://elated-williams-cd16dd.netlify.com/
+[http://bit.ly/bandungjs](http://bit.ly/bandungjs)
 
 ![qr-code](./docs/qr-code.png)
 
