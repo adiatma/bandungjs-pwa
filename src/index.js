@@ -1,3 +1,4 @@
+const globalStyle = require('./assets/css/main.css')
 const PosterBandungJS = require('./assets/img/poster-bandungjs.jpeg')
 
 function great(name) {
