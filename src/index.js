@@ -52,8 +52,6 @@ function createAudio(file, loop = false) {
 }
 
 const BACKSOUND = createAudio('backsound.mp3', true)
-BACKSOUND.play()
-
 const SCORE_S = createAudio('point.mp3')
 const FLAP = createAudio('flap.mp3')
 const HIT = createAudio('hit.wav')
@@ -79,6 +77,7 @@ canvas.onclick = e => {
   switch (state.current) {
     case state.getReady:
       state.current = state.game
+      BACKSOUND.play()
       SWOOSHING.play()
       break
     case state.game:
