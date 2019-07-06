@@ -43,7 +43,7 @@ function webpackConfig(environment) {
     module: {
       rules: [
         {
-          test: /\.(png|jpe?g|gif|mp3|wav)$/,
+          test: /\.(png|jpe?g|gif|ico|mp3|wav|json)$/,
           use: [
             {
               loader: 'file-loader',

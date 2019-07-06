@@ -23,9 +23,9 @@ const SECONDARY_COLOR = 'white'
 let frames = 0
 const DEGREE = Math.PI / 180
 
-const ASSETS = './assets'
-const IMAGES = `${ASSETS}/images`
-const AUDIO = `${ASSETS}/audio`
+const PATH_ASSETS = './assets'
+const PATH_IMAGES = `${PATH_ASSETS}/images`
+const PATH_AUDIO = `${PATH_ASSETS}/audio`
 
 /**
  * @param {string} params.src
@@ -36,7 +36,7 @@ function createImage({
   alt = 'sprites images',
 } = {}) {
   const image = new Image()
-  image.src = require(`${IMAGES}/${src}`)
+  image.src = require(`${PATH_IMAGES}/${src}`)
   image.alt = alt
   return image
 }
@@ -44,17 +44,20 @@ function createImage({
 /**
  * @param {string} file
  */
-function createAudio(file) {
+function createAudio(file, loop = false) {
   const audio = new Audio()
-  audio.src = require(`${AUDIO}/${file}`)
+  audio.src = require(`${PATH_AUDIO}/${file}`)
+  audio.loop = loop
   return audio
 }
 
-const BG_MUSIC = createAudio('bg_music.mp3')
+const BACKSOUND = createAudio('backsound.mp3', true)
+BACKSOUND.play()
+
 const SCORE_S = createAudio('point.mp3')
 const FLAP = createAudio('flap.mp3')
-const HIT = createAudio('sfx_hit.wav')
-const SWOOSHING = createAudio('sfx_swooshing.wav')
+const HIT = createAudio('hit.wav')
+const SWOOSHING = createAudio('swoosh.wav')
 const DIE = createAudio('die.mp3')
 
 const state = {
@@ -365,6 +368,7 @@ const obstacles = {
   update: function() {
     if (state.current !== state.game) return
 
+    // console.log('frames : ', frames)
     if (frames % 100 == 0) {
       this.position.push({
         x: CANVAS_WIDTH,
@@ -374,7 +378,7 @@ const obstacles = {
     for (let i = 0; i < this.position.length; i++) {
       let p = this.position[i]
 
-      let bottomPipeYPos = p.y + this.h + this.gap
+      let bottomObstacleYPos = p.y + this.h + this.gap
 
       // Check Collision
       if (
@@ -389,8 +393,8 @@ const obstacles = {
       if (
         dragon.x + dragon.radius > p.x &&
         dragon.x - dragon.radius < p.x + this.w &&
-        dragon.y + dragon.radius > bottomPipeYPos &&
-        dragon.y - dragon.radius < bottomPipeYPos + this.h
+        dragon.y + dragon.radius > bottomObstacleYPos &&
+        dragon.y - dragon.radius < bottomObstacleYPos + this.h
       ) {
         state.current = state.over
         HIT.play()
@@ -404,38 +408,38 @@ const obstacles = {
         this.position.shift()
         score.value += 1
         SCORE_S.play()
-        score.best = Math.max(score.value, score.best)
-        localStorage.setItem('best', score.best)
+        score.high_score = Math.max(score.value, score.high_score)
+        localStorage.setItem('high_score', score.high_score)
       }
     }
   },
 
   reset: function() {
     this.position = []
+    frames = 0
   },
 }
 
 const score = {
-  best: parseInt(localStorage.getItem('best')) || 0,
+  high_score: parseInt(localStorage.getItem('high_score')) || 0,
   value: 0,
 
   draw: function() {
-    ctx.fillStyle = '#FFF'
+    ctx.fillStyle = '#000'
     ctx.strokeStyle = '#000'
 
     if (state.current == state.game) {
       ctx.lineWidth = 2
-      ctx.font = '35px Teko'
+      ctx.font = '35px Roboto'
       ctx.fillText(this.value, CANVAS_WIDTH / 2, 50)
       ctx.strokeText(this.value, CANVAS_WIDTH / 2, 50)
     } else if (state.current == state.over) {
       // score value
-      ctx.font = '25px Arial'
-      ctx.fillText(this.value, 225, 186)
-      ctx.strokeText(this.value, 225, 186)
-      // best score
-      ctx.fillText(this.best, 225, 228)
-      ctx.strokeText(this.best, 225, 228)
+      ctx.font = '25px Roboto'
+      ctx.fillText(this.value, 170, 180)
+      // high_score score
+      ctx.fillText(this.high_score, 170, 215)
+      ctx.strokeText(this.high_score, 170, 215)
     }
   },
 
