@@ -1,5 +1,10 @@
 const mainCss = require('./assets/css/main.css')
 
+const device = {
+  width: (window.innerWidth > 0) ? window.innerWidth : screen.width,
+  height: (window.innerHeight > 0) ? window.innerHeight : screen.height,
+}
+
 function mountElement({elementID, width = 320, height = 480}) {
   return `
     <canvas id="${elementID}" width="${width}" height="${height}"></canvas>
@@ -65,15 +70,15 @@ const state = {
   over: 2,
 }
 
-const startBtn = {
+const restartBtn = {
   x: 0,
   y: 0,
-  w: CANVAS_WIDTH,
-  h: CANVAS_HEIGHT,
+  w: device.width,
+  h: device.height,
 }
 
-// CONTROL THE GAME
-canvas.onclick = e => {
+// game controls
+canvas.addEventListener('touchstart', e => {
   switch (state.current) {
     case state.getReady:
       state.current = state.game
@@ -86,16 +91,17 @@ canvas.onclick = e => {
       FLAP.play()
       break
     case state.over:
-      let rect = canvas.getBoundingClientRect()
-      let clickX = e.clientX - rect.left
-      let clickY = e.clientY - rect.top
 
+      let rect = canvas.getBoundingClientRect()
+      let clickX = e.touches[0].clientX - rect.left
+      let clickY = e.touches[0].clientY - rect.top
+      
       // check if we click on the start button
       if (
-        clickX >= startBtn.x &&
-        clickX <= startBtn.x + startBtn.w &&
-        clickY >= startBtn.y &&
-        clickY <= startBtn.y + startBtn.h
+        clickX >= restartBtn.x &&
+        clickX <= restartBtn.x + restartBtn.w &&
+        clickY >= restartBtn.y &&
+        clickY <= restartBtn.y + restartBtn.h
       ) {
         obstacles.reset()
         dragon.speedReset()
@@ -104,7 +110,7 @@ canvas.onclick = e => {
       }
       break
   }
-}
+})
 
 const bg = {
   sX: 0,
@@ -184,15 +190,15 @@ const fg = {
 
 const dragon = {
   animation: [
-    {sX: 276, sY: 112},
-    {sX: 276, sY: 139},
-    {sX: 276, sY: 164},
-    {sX: 276, sY: 139},
+    {sX: 10, sY: 0},
+    {sX: 200, sY: 0},
+    {sX: 393, sY: 0},
+    {sX: 200, sY: 0},
   ],
-  x: 20,
+  x: 30,
   y: 150,
-  w: 34,
-  h: 26,
+  w: 42,
+  h: 57,
 
   radius: 12,
 
@@ -205,16 +211,15 @@ const dragon = {
 
   draw: function() {
     let dragon = this.animation[this.frame]
-
     ctx.save()
     ctx.translate(this.x, this.y)
     ctx.rotate(this.rotation)
     ctx.drawImage(
-      createImage(),
+      createImage( {src: 'sprite-dragon.png' }),
       dragon.sX,
       dragon.sY,
-      this.w,
-      this.h,
+      162,
+      177,
       -this.w / 2,
       -this.h / 2,
       this.w,
@@ -255,9 +260,9 @@ const dragon = {
       if (this.speed >= this.jump) {
         this.rotation = 90 * DEGREE
         this.frame = 1
-      } else {
-        this.rotation = -25 * DEGREE
-      }
+      } else 
+        this.rotation = -15 * DEGREE
+
     }
   },
   speedReset: function() {
@@ -296,9 +301,22 @@ const gameOver = {
   h: 202,
   x: CANVAS_WIDTH / 2 - 225 / 2,
   y: 90,
-
+  drawBackground: function() {
+    ctx.drawImage(
+      createImage(),
+      320,
+      112,
+      100,
+      100,
+      0,
+      0,
+      CANVAS_WIDTH,
+      CANVAS_HEIGHT
+    )
+  },
   draw: function() {
     if (state.current == state.over)
+
       ctx.drawImage(
         createImage(),
         this.sX,
@@ -367,7 +385,6 @@ const obstacles = {
   update: function() {
     if (state.current !== state.game) return
 
-    // console.log('frames : ', frames)
     if (frames % 100 == 0) {
       this.position.push({
         x: CANVAS_WIDTH,
@@ -433,12 +450,12 @@ const score = {
       ctx.fillText(this.value, CANVAS_WIDTH / 2, 50)
       ctx.strokeText(this.value, CANVAS_WIDTH / 2, 50)
     } else if (state.current == state.over) {
-      // score value
+      gameOver.drawBackground()
+      gameOver.draw()
+
       ctx.font = '25px Roboto'
       ctx.fillText(this.value, 170, 180)
-      // high_score score
       ctx.fillText(this.high_score, 170, 215)
-      ctx.strokeText(this.high_score, 170, 215)
     }
   },
 
