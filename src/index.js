@@ -6,4 +6,8 @@ const app = new App({
 
 window.app = app
 
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/service-worker.js');
+}
+
 export default app
