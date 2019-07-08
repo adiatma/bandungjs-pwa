@@ -92,10 +92,11 @@ function webpackConfig(environment) {
           ],
         },
         {
-          test: /\.(html|svelte)$/,
-          include: appResolve('src'),
-          exclude: /node_modules/,
-          use: 'svelte-loader',
+          test: /\.svelte$/,
+          exclude: /node_modules\/(?!(svero)\/).*/,
+          use: {
+            loader: 'svelte-loader'
+          }
         },
       ],
     },
