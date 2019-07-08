@@ -82,6 +82,12 @@ function webpackConfig(environment) {
             },
           ],
         },
+        {
+          test: /\.(html|svelte)$/,
+          include: appResolve('src'),
+          exclude: /node_modules/,
+          use: 'svelte-loader',
+        }
       ],
     },
     plugins: [
