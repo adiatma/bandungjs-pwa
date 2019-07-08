@@ -2,6 +2,7 @@
 node_modules
 *.log
 *.lock
+*lock.json
 
 # OSX
 .DS_Store
