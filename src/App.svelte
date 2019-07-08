@@ -12,7 +12,7 @@
     storageBucket: '',
     messagingSenderId: '1085804661670',
     appId: '1:1085804661670:web:e9dbd4949057ccf2'
-  };
+  }
 
   function getDate(){
     let today = new Date()
@@ -24,9 +24,10 @@
     return today
   }
 
-  firebase.initializeApp(firebaseConfig);
-  var database = firebase.database();
-  let UniqueID = Math.random().toString(36).substring(7);
+  firebase.initializeApp(firebaseConfig)
+  var database = firebase.database()
+  let UniqueID = Math.random().toString(36).substring(7)
+  let username = prompt('Input your name : ')
 
   function writeScore(userId, name, current_score, high_score, user_agent, date) {
     firebase.database().ref('users/' + userId).set({
@@ -36,12 +37,11 @@
       user_agent: user_agent,
       date: date,
     }, function(error) {
-    if (error) {
-      console.log(error)
-    } else {
-      console.log('data has been saved')
-    }
-  });
+      if (error)
+        console.log(error)
+      else 
+        console.log('data has been saved')
+    })
   }
 
   let canvas
@@ -460,8 +460,7 @@
             SCORE_S.play()
             score.high_score = Math.max(score.value, score.high_score)
             localStorage.setItem('high_score', score.high_score)
-            writeScore(UniqueID, 'agus', score.value, score.high_score, navigator.userAgent, getDate())
-            
+            writeScore(UniqueID, username, score.value, score.high_score, navigator.userAgent, getDate())            
           }
         }
       },
@@ -523,13 +522,30 @@
       update()
       draw()
       frames++
-      frame = requestAnimationFrame(loop);
+      frame = requestAnimationFrame(loop)
     }()) 
 
 		return () => {
-			cancelAnimationFrame(frame);
-		};
+			cancelAnimationFrame(frame)
+		}
   })
+
+  // get score data
+  var usersRef = database.ref('users')
+  usersRef.on('value', function(snapshot) {
+      var temp = []
+      snapshot.forEach(function(childSnapshot) {
+        var childData = childSnapshot.val()
+        temp.push(childData)
+      }) 
+
+      // sorting high_score (priority : high_score, current_score)
+      temp = temp.sort((a, b) => (a.high_score < b.high_score) ? 1 : (a.high_score === b.high_score) ? 
+        ((a.current_score < b.current_score) ? 1 : -1) : -1)
+      console.clear()
+      console.table(temp)
+  })
+ 
 </script>
 
 <style>
@@ -538,7 +554,6 @@
     height: 100vh;
   }
 </style>
-
 <canvas bind:this={canvas} width={320} height={480}>
   Fallback text for non-supported browsers
 </canvas>
