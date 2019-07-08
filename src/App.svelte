@@ -1,5 +1,48 @@
 <script>
   import { onMount } from 'svelte'
+  import * as firebase from 'firebase/app'
+  import 'firebase/auth'
+  import 'firebase/database'
+
+  var firebaseConfig = {
+    apiKey: 'AIzaSyCpPOYISxSTRudgw1P6ttXTyMZDrpGWp6A',
+    authDomain: 'bandungjs-c3782.firebaseapp.com',
+    databaseURL: 'https://bandungjs-c3782.firebaseio.com',
+    projectId: 'bandungjs-c3782',
+    storageBucket: '',
+    messagingSenderId: '1085804661670',
+    appId: '1:1085804661670:web:e9dbd4949057ccf2'
+  };
+
+  function getDate(){
+    let today = new Date()
+    let dd = String(today.getDate()).padStart(2, '0')
+    let mm = String(today.getMonth() + 1).padStart(2, '0')
+    let yyyy = today.getFullYear()
+
+    today = mm + '/' + dd + '/' + yyyy
+    return today
+  }
+
+  firebase.initializeApp(firebaseConfig);
+  var database = firebase.database();
+  let UniqueID = Math.random().toString(36).substring(7);
+
+  function writeScore(userId, name, current_score, high_score, user_agent, date) {
+    firebase.database().ref('users/' + userId).set({
+      username: name,
+      current_score: current_score,
+      high_score: high_score,
+      user_agent: user_agent,
+      date: date,
+    }, function(error) {
+    if (error) {
+      console.log(error)
+    } else {
+      console.log('data has been saved')
+    }
+  });
+  }
 
   let canvas
 
@@ -191,7 +234,7 @@
       w: 42,
       h: 57,
 
-      radius: 12,
+      radius: 15,
 
       frame: 0,
 
@@ -417,6 +460,8 @@
             SCORE_S.play()
             score.high_score = Math.max(score.value, score.high_score)
             localStorage.setItem('high_score', score.high_score)
+            writeScore(UniqueID, 'agus', score.value, score.high_score, navigator.userAgent, getDate())
+            
           }
         }
       },
