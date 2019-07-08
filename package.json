@@ -23,6 +23,7 @@
     "serve": "serve -s build"
   },
   "dependencies": {
+    "firebase": "^6.2.4",
     "svelte": "^3.6.5"
   }
 }
