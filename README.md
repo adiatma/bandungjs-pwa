@@ -1,5 +1,7 @@
 # BandungJS PWA
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/04d0c128-348d-46fd-a3d5-2a763ea0038e/deploy-status)](https://app.netlify.com/sites/elated-williams-cd16dd/deploys)
+
 Official repository for [meetup bandungjs #21](https://www.meetup.com/BandungJS/events/262832383/).
 
 ## Live
