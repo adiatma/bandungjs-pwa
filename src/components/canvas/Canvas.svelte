@@ -191,11 +191,11 @@
     }
 
     const fg = {
-      sX: 276,
+      sX: 277,
       sY: 0,
-      w: 224,
+      w: 222,
       h: 112,
-      x: 0,
+      x: -222,
       y: CANVAS_HEIGHT - 112,
 
       dx: 2,
@@ -209,7 +209,7 @@
           this.h,
           this.x,
           this.y,
-          this.w,
+          320,
           this.h,
         )
         ctx.drawImage(
@@ -218,16 +218,16 @@
           this.sY,
           this.w,
           this.h,
-          this.x + this.w,
+          this.x + 320,
           this.y,
-          this.w,
+          320,
           this.h,
         )
       },
 
       update: function() {
         if (state.current == state.game)
-          this.x = (this.x - this.dx) % (this.w / 2)
+          this.x = (this.x - this.dx) % (320/1)
       },
     }
 
@@ -486,10 +486,10 @@
 
       draw: function() {
         ctx.fillStyle = '#000'
-        ctx.strokeStyle = '#000'
+        ctx.strokeStyle = '#fff'
 
         if (state.current == state.game) {
-          ctx.lineWidth = 2
+          ctx.lineWidth = 1
           ctx.font = '35px Roboto'
           ctx.fillText(this.value, CANVAS_WIDTH / 2, 50)
           ctx.strokeText(this.value, CANVAS_WIDTH / 2, 50)
