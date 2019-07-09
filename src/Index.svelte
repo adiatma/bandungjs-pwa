@@ -1,9 +1,10 @@
 <script>
-  import { Link } from 'svero'
+  import { Link, navigateTo } from 'svero'
+  import { username } from './stores.js';
   import * as firebase from 'firebase/app'
   import 'firebase/auth'
   import 'firebase/database'
-
+  
   let temp = []
 
   let firebaseConfig = {
@@ -45,6 +46,13 @@
   
   function cutText(str){
     return (str ? str : '').substring(0, (str ? str : '').indexOf(")")+1)
+  }
+
+  function playGame(e){
+    $username = prompt('Input your name : ') 
+    if ($username) {
+      navigateTo('/game')
+    }
   }
 </script>
 <style>
@@ -140,7 +148,7 @@
 
 <div class="container">
   <div class="helmet">
-    <Link href="/game"><div class="btn-play">Play Game</div></Link>
+    <div class="btn-play" on:click={playGame}>Play Game</div>
     <label class="helmet-title">#21 BandungJS</label>
   </div>
   <div class="armour">

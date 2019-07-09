@@ -3,6 +3,7 @@
 
   import Canvas from './Canvas.svelte'
   import Index from './Index.svelte'
+
 </script>
 
 <Router>
