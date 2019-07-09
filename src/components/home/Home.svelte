@@ -1,6 +1,6 @@
 <script>
   import { navigateTo } from 'svero'
-  import { username } from '@stores';
+  import { username, hasKey } from '@stores';
   import { database } from '@config/firebase'
   import { osFilter, getImageSource, cutText, sorted } from './utils'
   
@@ -22,8 +22,12 @@
   })
 
   function playGame() {
-    $username = prompt('Input your name : ') 
-    if ($username) navigateTo('/game')
+    if (!$hasKey) {
+      $username = prompt('Input your name : ') 
+      if ($username) navigateTo('/game')
+    } else {
+      navigateTo('/game')
+    }
   }
 </script>
 
@@ -131,7 +135,11 @@
 
 <div class="container">
   <div class="helmet">
-    <div class="btn-play" on:click={playGame}>Play Game</div>
+    {#if !$hasKey}
+      <div class="btn-play" on:click={playGame}>Play Game</div>
+    {:else}
+      <div class="btn-play" on:click={playGame}>Back to Game</div>
+    {/if}
     <label class="helmet-title">#21 BandungJS</label>
   </div>
   <div class="armour">
