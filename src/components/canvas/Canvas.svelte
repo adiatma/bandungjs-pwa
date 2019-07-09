@@ -1,7 +1,7 @@
 <script>
   import { onMount } from 'svelte'
   import { navigateTo } from 'svero'
-  import { username } from '@stores';
+  import { username, hasKey } from '@stores';
   import { database } from '@config/firebase.js'
 
   let uniqueID = Math.random().toString(36).substring(7)
@@ -30,6 +30,7 @@
   }
 
   function writeScore(unique_id, name, current_score, high_score, user_agent, date) {
+    hasKey.update(value => value = unique_id)
     database.ref('users/' + unique_id).set({
       username: name,
       current_score: current_score,

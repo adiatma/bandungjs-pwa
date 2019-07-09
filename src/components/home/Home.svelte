@@ -1,57 +1,43 @@
 <script>
   import { navigateTo } from 'svero'
-  import { username } from '@stores';
+  import { username, hasKey } from '@stores';
   import { database } from '@config/firebase'
+  import { osFilter, getImageSource, cutText, sorted } from './utils'
   
   const crowns = ['gold.png', 'silver.png', 'bronze.png']
   let temp = []
-  
+
    // get score data
   let usersRef = database.ref('users')
   usersRef.on('value', function(snapshot) {
-      temp = []
-      snapshot.forEach(function(childSnapshot) {
-        let childData = childSnapshot.val()
-        if(childData.current_score != undefined)
-          temp.push(childData)
-      }) 
+    temp = []
+    snapshot.forEach(function(childSnapshot) {
+      let childData = childSnapshot.val()
+      if(childData.current_score != undefined)
+        temp = [...temp, childData]
+    }) 
 
-      // sorting high_score (priority : high_score, current_score)
-      temp = temp.sort((a, b) => (a.high_score < b.high_score) ? 1 : (a.high_score === b.high_score) ? 
-        ((a.current_score < b.current_score) ? 1 : -1) : -1)
-
+    // sorting high_score (priority : high_score, current_score)
+    temp = sorted(temp)
   })
 
-  function getImageSource(filename){
-    return require(`@assets/images/${filename}`)
-  }
-
-  function osFilter(os){
-    let image = new Image()
-    os = os.includes('Android') ? 'android.png' : 'ios.png'
-    image.src = getImageSource(os)
-    image.title = os
-    return `<img src="${image.src}" title="${image.title}" alt="${image.title}" width="20px"  />`
-  }
-  
-  function cutText(str){
-    return (str ? str : '').substring(0, (str ? str : '').indexOf(")")+1)
-  }
-
-  function playGame(e){
-    $username = prompt('Input your name : ') 
-    if ($username) {
+  function playGame() {
+    if (!$hasKey) {
+      $username = prompt('Input your name : ') 
+      if ($username) navigateTo('/game')
+    } else {
       navigateTo('/game')
     }
   }
 </script>
+
 <style>
   * {
     padding: 0;
     margin: 0;
   }
   
-  .container{
+  .container {
     background: #0b2d53;
     min-height: 100vh;
     font-family: 'Roboto';
@@ -60,7 +46,7 @@
     padding: 15px;
   }
 
-  .helmet{
+  .helmet {
     height: 40px;
     display: flex;
     justify-content: start;
@@ -68,26 +54,26 @@
     padding: 10px 0;
     text-decoration: none;
   }
-  .armour{
+  .armour {
     overflow-x: scroll;
   }
-  .helmet > .helmet-title{
+  .helmet > .helmet-title {
     color: white;
     padding: 10px;
   }
 
-  .table{
+  .table {
     width: 100%;
     background: #0b2d53;
     color: white;
     border-collapse: collapse;
   }
 
-  .table tbody{
+  .table tbody {
     background-color: #0e3964;
   }
 
-  .table th{
+  .table th {
     background-color: transparent;
     text-transform: uppercase;
     color: #caecee;
@@ -95,25 +81,25 @@
     padding: 5px;
   }
 
-  .table th:nth-child(2){
+  .table th:nth-child(2) {
     text-align: left;
   }
 
-  .table tr{
+  .table tr {
     margin: 3px 0;
     border-bottom: 3px solid #0b2d53;
   }
 
-  .table td{
+  .table td {
     padding: 5px;
   }
 
-  .table td:first-child{
+  .table td:first-child {
     text-align: center;
     border-right: 3px solid #0b2d53;
   }
 
-  .table td small{
+  .table td small {
     color: #84aebf;
     text-overflow: ellipsis;
     font-size: 12px;
@@ -127,7 +113,7 @@
     font-weight: bold;
   }
 
-  .btn-play{
+  .btn-play {
     color: white;
     text-decoration: none;
     border: 1px solid white;
@@ -135,13 +121,13 @@
     padding: 8px 10px;
   }
 
- .crowns-container{
+ .crowns-container {
     display:flex; 
     align-items: center; 
     justify-content: center;
   }
 
-  .crowns{
+  .crowns {
     margin-right: 5px;
     width: 20px;
   }
@@ -149,7 +135,11 @@
 
 <div class="container">
   <div class="helmet">
-    <div class="btn-play" on:click={playGame}>Play Game</div>
+    {#if !$hasKey}
+      <div class="btn-play" on:click={playGame}>Play Game</div>
+    {:else}
+      <div class="btn-play" on:click={playGame}>Back to Game</div>
+    {/if}
     <label class="helmet-title">#21 BandungJS</label>
   </div>
   <div class="armour">
