@@ -90,6 +90,14 @@
     border-bottom: 3px solid #0b2d53;
   }
 
+  .table tr.active{
+    background-color: #2980b9;
+  }
+  
+  .table tr.active small{
+    color: #ecf0f1;
+  }
+
   .table td {
     padding: 5px;
   }
@@ -155,7 +163,7 @@
         </thead>
         <tbody>
           {#each temp as t, idx}
-            <tr>
+            <tr class:active="{t.unique_id === $hasKey}" >
               <td>
                 <div class="crowns-container">
                   {#if (idx < 3) }
