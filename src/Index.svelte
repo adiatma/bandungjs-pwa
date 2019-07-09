@@ -61,46 +61,74 @@
     overflow: hidden;
     padding: 15px;
   }
+
   .helmet{
     height: 40px;
     display: flex;
     justify-content: start;
+    align-items: center;
     padding: 10px 0;
     text-decoration: none;
   }
+  .armour{
+    overflow-x: scroll;
+  }
+  .helmet > .helmet-title{
+    color: white;
+    padding: 10px;
+  }
+
   .table{
     width: 100%;
     background: #0b2d53;
     color: white;
+    border-collapse: collapse;
   }
+
+  .table tbody{
+    background-color: #0e3964;
+  }
+
   .table th{
+    background-color: transparent;
     text-transform: uppercase;
     color: #caecee;
     font-weight: bold;
     padding: 5px;
   }
+
+  .table th:nth-child(2){
+    text-align: left;
+  }
+
   .table tr{
     margin: 3px 0;
+    border-bottom: 3px solid #0b2d53;
   }
 
   .table td{
-    background-color: #0e3964;
     padding: 5px;
   }
+
   .table td:first-child{
-    margin-right: 3px;
     text-align: center;
+    border-right: 3px solid #0b2d53;
   }
+
   .table td small{
     color: #84aebf;
     text-overflow: ellipsis;
+    font-size: 12px;
   }
+
   .text-center{
     text-align: center;
   }
+
   .bold{
     font-weight: bold;
   }
+
   .btn-play{
     color: white;
     text-decoration: none;
@@ -113,35 +141,36 @@
 <div class="container">
   <div class="helmet">
     <Link href="/game"><div class="btn-play">Play Game</div></Link>
+    <label class="helmet-title">#21 BandungJS</label>
   </div>
- 
-  {#if temp.length > 0}
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Rank</th>
-          <th colspan="2">Player</th>
-          <th>Current Score</th>
-          <th>High Score</th>
-        </tr>
-      </thead>
-      <tbody>
-        {#each temp as t, idx}
+  <div class="armour">
+    {#if temp.length > 0}
+      <table class="table">
+        <thead>
           <tr>
-            <td>{idx+=1}</td>
-            <td class="text-center">{@html osFilter(t.user_agent != undefined ? t.user_agent : '-')}</td>
-            <td>
-              <div>{t.username}</div>
-              <small>{cutText(t.user_agent)}</small>
-            </td>
-            <td class="text-center bold">{t.current_score}</td>
-            <td class="text-center bold">{t.high_score}</td>
+            <th>Rank</th>
+            <th colspan="2">Player</th>
+            <th>Current Score</th>
+            <th>High Score</th>
           </tr>
-        {/each}
-      </tbody>
-    </table>
-  {:else}
-    <p>Please wait a seconds...</p>
-  {/if}
-
+        </thead>
+        <tbody>
+          {#each temp as t, idx}
+            <tr>
+              <td>{idx+=1}</td>
+              <td class="text-center">{@html osFilter(t.user_agent != undefined ? t.user_agent : '-')}</td>
+              <td>
+                <div>{t.username}</div>
+                <small>{cutText(t.user_agent)}</small>
+              </td>
+              <td class="text-center bold">{t.current_score}</td>
+              <td class="text-center bold">{t.high_score}</td>
+            </tr>
+          {/each}
+        </tbody>
+      </table>
+    {:else}
+      <p>Please wait a seconds...</p>
+    {/if}
+  </div>
 </div>
