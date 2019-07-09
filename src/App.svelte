@@ -1,9 +1,8 @@
 <script>
   import { Router, Route } from 'svero'
 
-  import Canvas from './Canvas.svelte'
-  import Index from './Index.svelte'
-
+  import Index from './components/index/Index.svelte'
+  import Canvas from './components/canvas/Canvas.svelte'
 </script>
 
 <Router>
