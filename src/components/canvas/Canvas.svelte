@@ -1,5 +1,6 @@
 <script>
   import { onMount } from 'svelte'
+  import { navigateTo } from 'svero'
   import { username } from '@stores';
   import { database } from '@config/firebase.js'
 
@@ -12,10 +13,12 @@
       $username = prompt('Input your name : ')
     }
   }
+
   function scoreboardScene(){
     console.log('jump to scoreboard scene')
     navigateTo('/')
   }
+
   function getDate(){
     let today = new Date()
     let dd = String(today.getDate()).padStart(2, '0')
@@ -26,13 +29,14 @@
     return today
   }
 
-  function writeScore(userId, name, current_score, high_score, user_agent, date) {
-    database.ref('users/' + userId).set({
+  function writeScore(unique_id, name, current_score, high_score, user_agent, date) {
+    database.ref('users/' + unique_id).set({
       username: name,
       current_score: current_score,
       high_score: high_score,
       user_agent: user_agent,
       date: date,
+      unique_id: unique_id,
     }, function(error) {
       if (error)
         console.log(error)
@@ -524,31 +528,46 @@
 		}
   })
 
-  // get score data
-  var usersRef = database.ref('users')
+  let temp = []
+  $: currentRank = '-'
+  
+   // get score data
+  let usersRef = database.ref('users')
   usersRef.on('value', function(snapshot) {
-      var temp = []
+      temp = []
+      
       snapshot.forEach(function(childSnapshot) {
-        var childData = childSnapshot.val()
-        temp.push(childData)
+        let childData = childSnapshot.val()
+        
+        if(childData.current_score != undefined){
+          temp.push(childData)
+        }
       }) 
 
       // sorting high_score (priority : high_score, current_score)
       temp = temp.sort((a, b) => (a.high_score < b.high_score) ? 1 : (a.high_score === b.high_score) ? 
         ((a.current_score < b.current_score) ? 1 : -1) : -1)
-  })
+      temp.map((item, idx) => {
+        if(item.unique_id == uniqueID){
+          currentRank = idx+1
+          return
+        }  
+      })
 
+  })
 </script>
 
 <style>
   .helmet{
     background: #f58220;
-    width: 100%;
+    width: calc(100% - 6px);
     height: 20px;
     padding: 3px;
     font-size: 14px;
     color: white;
     font-family: 'Roboto';
+    display: flex;
+    justify-content: space-between;
   }
   canvas {
     width: 100%;
@@ -557,9 +576,16 @@
   label.user-label{
     color: white;
   }
+  label.scoreboard-label{
+    color: white;
+    background-color: #7a400d;
+    font-size: 12px;
+    border-radius: 2px;
+    padding: 3px;
+  }
 </style>
 <div class="helmet">
   <label class="user-label">Hello, <strong>{$username}</strong></label>
-  <label class="scoreboard-label" on:click={scoreboardScene}>Scoreboard</label>
+  <label class="scoreboard-label" on:click={scoreboardScene}>You're in rank <strong>{currentRank}</strong></label>
 </div>
 <canvas bind:this={canvas} width={320} height={480}></canvas>
