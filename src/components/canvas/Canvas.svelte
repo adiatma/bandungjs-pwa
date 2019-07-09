@@ -1,8 +1,7 @@
 <script>
   import { onMount } from 'svelte'
-  import { navigateTo } from 'svero'
-  import { username } from '../../stores.js';
-  import { database } from '../../config/firebase.js'
+  import { username } from '@stores';
+  import { database } from '@config/firebase.js'
 
   let uniqueID = Math.random().toString(36).substring(7)
 
@@ -63,10 +62,6 @@
     let frames = 0
     const DEGREE = Math.PI / 180
 
-    const PATH_ASSETS = './assets'
-    const PATH_IMAGES = `${PATH_ASSETS}/images`
-    const PATH_AUDIO = `${PATH_ASSETS}/audio`
-
     /**
      * @param {string} params.src
      * @param {string} params.alt
@@ -76,7 +71,7 @@
       alt = 'sprites images',
     } = {}) {
       const image = new Image()
-      image.src = require(`${PATH_IMAGES}/${src}`)
+      image.src = require(`@assets/images/${src}`)
       image.alt = alt
       return image
     }
@@ -86,7 +81,7 @@
      */
     function createAudio(file, loop = false) {
       const audio = new Audio()
-      audio.src = require(`${PATH_AUDIO}/${file}`)
+      audio.src = require(`@assets/audio/${file}`)
       audio.loop = loop
       return audio
     }
