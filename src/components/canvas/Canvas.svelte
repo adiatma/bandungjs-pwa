@@ -1,8 +1,22 @@
 <script>
   import { onMount } from 'svelte'
+  import { navigateTo } from 'svero'
   import { username } from '../../stores.js';
   import { database } from '../../config/firebase.js'
 
+  let uniqueID = Math.random().toString(36).substring(7)
+
+  // check username is exists
+  if($username == null){
+    $username = prompt('Input your name : ')
+    while($username == null || $username.length == 0){
+      $username = prompt('Input your name : ')
+    }
+  }
+  function scoreboardScene(){
+    console.log('jump to scoreboard scene')
+    navigateTo('/')
+  }
   function getDate(){
     let today = new Date()
     let dd = String(today.getDate()).padStart(2, '0')
@@ -12,8 +26,6 @@
     today = mm + '/' + dd + '/' + yyyy
     return today
   }
-
-  let UniqueID = Math.random().toString(36).substring(7)
 
   function writeScore(userId, name, current_score, high_score, user_agent, date) {
     database.ref('users/' + userId).set({
@@ -34,6 +46,7 @@
 
   onMount(() => {
     const ctx = canvas.getContext('2d')
+
     let frame
 
     const device = {
@@ -445,8 +458,8 @@
             score.value += 1
             SCORE_S.play()
             score.high_score = Math.max(score.value, score.high_score)
-            localStorage.setItem('high_score', score.high_score)
-            writeScore(UniqueID, $username, score.value, score.high_score, navigator.userAgent, getDate())            
+            localStorage.setItem(`high_score_${uniqueID}`, score.high_score)
+            writeScore(uniqueID, $username, score.value, score.high_score, navigator.userAgent, getDate())            
           }
         }
       },
@@ -458,7 +471,7 @@
     }
 
     const score = {
-      high_score: parseInt(localStorage.getItem('high_score')) || 0,
+      high_score: parseInt(localStorage.getItem(`high_score_${uniqueID}`)) || 0,
       value: 0,
 
       draw: function() {
@@ -529,14 +542,29 @@
       temp = temp.sort((a, b) => (a.high_score < b.high_score) ? 1 : (a.high_score === b.high_score) ? 
         ((a.current_score < b.current_score) ? 1 : -1) : -1)
   })
- 
+
 </script>
 
 <style>
+  .helmet{
+    background: #f58220;
+    width: 100%;
+    height: 20px;
+    padding: 3px;
+    font-size: 14px;
+    color: white;
+    font-family: 'Roboto';
+  }
   canvas {
     width: 100%;
-    height: 100vh;
+    height: calc(100vh - 20px);
+  }
+  label.user-label{
+    color: white;
   }
 </style>
-
+<div class="helmet">
+  <label class="user-label">Hello, <strong>{$username}</strong></label>
+  <label class="scoreboard-label" on:click={scoreboardScene}>Scoreboard</label>
+</div>
 <canvas bind:this={canvas} width={320} height={480}></canvas>
