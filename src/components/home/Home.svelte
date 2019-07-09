@@ -1,5 +1,5 @@
 <script>
-  import { Link, navigateTo } from 'svero'
+  import { navigateTo } from 'svero'
   import { username } from '@stores';
   import { database } from '@config/firebase'
   
