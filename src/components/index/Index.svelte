@@ -3,7 +3,9 @@
   import { username } from '../../stores.js';
   import { database } from '../../config/firebase'
   
+  const crowns = ['gold.png', 'silver.png', 'bronze.png']
   let temp = []
+  
    // get score data
   let usersRef = database.ref('users')
   usersRef.on('value', function(snapshot) {
@@ -20,10 +22,14 @@
 
   })
 
+  function getImageSource(filename){
+    return require(`./assets/images/${filename}`)
+  }
+
   function osFilter(os){
     let image = new Image()
-    os = os.includes('Android') ? 'android' : 'ios'
-    image.src = require(`./assets/images/${os}.png`)
+    os = os.includes('Android') ? 'android.png' : 'ios.png'
+    image.src = getImageSource(os)
     image.title = os
     return `<img src="${image.src}" title="${image.title}" alt="${image.title}" width="20px"  />`
   }
@@ -128,6 +134,17 @@
     border-radius: 5px;
     padding: 8px 10px;
   }
+
+ .crowns-container{
+    display:flex; 
+    align-items: center; 
+    justify-content: center;
+  }
+
+  .crowns{
+    margin-right: 5px;
+    width: 20px;
+  }
 </style>
 
 <div class="container">
@@ -149,9 +166,16 @@
         <tbody>
           {#each temp as t, idx}
             <tr>
-              <td>{idx+=1}</td>
-              <td class="text-center">{@html osFilter(t.user_agent != undefined ? t.user_agent : '-')}</td>
               <td>
+                <div class="crowns-container">
+                  {#if (idx < 3) }
+                    <img class="crowns" src="{getImageSource(crowns[idx])}" alt="crown"/>
+                  {/if}
+                  {idx+1}
+                </div>
+              </td>
+              <td class="text-center">{@html osFilter(t.user_agent != undefined ? t.user_agent : '-')}</td>
+              <td>  
                 <div>{t.username}</div>
                 <small>{cutText(t.user_agent)}</small>
               </td>
