@@ -1,25 +1,9 @@
 <script>
   import { Link, navigateTo } from 'svero'
-  import { username } from './stores.js';
-  import * as firebase from 'firebase/app'
-  import 'firebase/auth'
-  import 'firebase/database'
+  import { username } from '../../stores.js';
+  import { database } from '../../config/firebase'
   
   let temp = []
-
-  let firebaseConfig = {
-    apiKey: 'AIzaSyCpPOYISxSTRudgw1P6ttXTyMZDrpGWp6A',
-    authDomain: 'bandungjs-c3782.firebaseapp.com',
-    databaseURL: 'https://bandungjs-c3782.firebaseio.com',
-    projectId: 'bandungjs-c3782',
-    storageBucket: '',
-    messagingSenderId: '1085804661670',
-    appId: '1:1085804661670:web:e9dbd4949057ccf2'
-  }
-
-  firebase.initializeApp(firebaseConfig)
-  let database = firebase.database()
-
    // get score data
   let usersRef = database.ref('users')
   usersRef.on('value', function(snapshot) {
@@ -39,7 +23,7 @@
   function osFilter(os){
     let image = new Image()
     os = os.includes('Android') ? 'android' : 'ios'
-    image.src = require(`./assets/images/${os}.png`)
+    image.src = require(`../../assets/images/${os}.png`)
     image.title = os
     return `<img src="${image.src}" title="${image.title}" alt="${image.title}" width="20px"  />`
   }

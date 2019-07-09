@@ -37,6 +37,7 @@ function webpackConfig(environment) {
     devServer: {
       contentBase: appResolve('build'),
       port: 8000,
+      historyApiFallback: true,
     },
     entry: appResolve('src/index.js'),
     output: {

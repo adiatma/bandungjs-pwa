@@ -1,19 +1,7 @@
 <script>
   import { onMount } from 'svelte'
-  import { username } from './stores.js';
-  import * as firebase from 'firebase/app'
-  import 'firebase/auth'
-  import 'firebase/database'
-
-  var firebaseConfig = {
-    apiKey: 'AIzaSyCpPOYISxSTRudgw1P6ttXTyMZDrpGWp6A',
-    authDomain: 'bandungjs-c3782.firebaseapp.com',
-    databaseURL: 'https://bandungjs-c3782.firebaseio.com',
-    projectId: 'bandungjs-c3782',
-    storageBucket: '',
-    messagingSenderId: '1085804661670',
-    appId: '1:1085804661670:web:e9dbd4949057ccf2'
-  }
+  import { username } from '../../stores.js';
+  import { database } from '../../config/firebase.js'
 
   function getDate(){
     let today = new Date()
@@ -25,12 +13,10 @@
     return today
   }
 
-  // firebase.initializeApp(firebaseConfig)
-  var database = firebase.database()
   let UniqueID = Math.random().toString(36).substring(7)
 
   function writeScore(userId, name, current_score, high_score, user_agent, date) {
-    firebase.database().ref('users/' + userId).set({
+    database.ref('users/' + userId).set({
       username: name,
       current_score: current_score,
       high_score: high_score,
