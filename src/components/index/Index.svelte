@@ -23,7 +23,7 @@
   function osFilter(os){
     let image = new Image()
     os = os.includes('Android') ? 'android' : 'ios'
-    image.src = require(`../../assets/images/${os}.png`)
+    image.src = require(`./assets/images/${os}.png`)
     image.title = os
     return `<img src="${image.src}" title="${image.title}" alt="${image.title}" width="20px"  />`
   }
