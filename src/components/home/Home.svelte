@@ -1,7 +1,7 @@
 <script>
   import { Link, navigateTo } from 'svero'
-  import { username } from '../../stores.js';
-  import { database } from '../../config/firebase'
+  import { username } from '@stores';
+  import { database } from '@config/firebase'
   
   const crowns = ['gold.png', 'silver.png', 'bronze.png']
   let temp = []
@@ -23,7 +23,7 @@
   })
 
   function getImageSource(filename){
-    return require(`./assets/images/${filename}`)
+    return require(`@assets/images/${filename}`)
   }
 
   function osFilter(os){

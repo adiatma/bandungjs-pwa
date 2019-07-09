@@ -26,6 +26,54 @@ function Copy(files) {
 }
 
 /**
+ * @param {boolean} param.isModeProduction
+ */
+function FileLoader({isModeProduction}) {
+  return {
+    test: /\.(png|jpe?g|gif|ico|mp3|wav|json)$/,
+    use: [
+      {
+        loader: 'file-loader',
+        options: {
+          name(file) {
+            if (isModeProduction) {
+              return '[hash].[ext]'
+            }
+
+            return '[path][name].[ext]'
+          },
+        },
+      },
+    ],
+  }
+}
+
+/**
+ * @param {object} param.options
+ */
+function CSSLoader({...options}) {
+  return {
+    test: /\.css$/,
+    exclude: /\.useable\.css$/,
+    ...options,
+  }
+}
+
+/**
+ * @param {object} options
+ */
+function SvelteLoader({options} = {}) {
+  return {
+    test: /\.svelte$/,
+    exclude: /node_modules\/(?!(svero)\/).*/,
+    use: {
+      loader: 'svelte-loader',
+      options,
+    },
+  }
+}
+
+/**
  * @param {object} environment
  * @return {object}
  */
@@ -34,12 +82,15 @@ function webpackConfig(environment) {
 
   return {
     mode: environment.mode,
+
     devServer: {
       contentBase: appResolve('build'),
       port: 8000,
       historyApiFallback: true,
     },
+
     entry: appResolve('src/index.js'),
+
     output: {
       path: appResolve('build'),
       filename(name) {
@@ -50,28 +101,12 @@ function webpackConfig(environment) {
         return '[name].bundle.js'
       },
     },
+
     module: {
       rules: [
-        {
-          test: /\.(png|jpe?g|gif|ico|mp3|wav|json)$/,
-          use: [
-            {
-              loader: 'file-loader',
-              options: {
-                name(file) {
-                  if (isModeProduction) {
-                    return '[hash].[ext]'
-                  }
+        FileLoader({isModeProduction}),
 
-                  return '[path][name].[ext]'
-                },
-              },
-            },
-          ],
-        },
-        {
-          test: /\.css$/,
-          exclude: /\.useable\.css$/,
+        CSSLoader({
           use: [
             {
               loader: 'style-loader',
@@ -80,9 +115,9 @@ function webpackConfig(environment) {
               loader: 'css-loader',
             },
           ],
-        },
-        {
-          test: /\.useable\.css$/,
+        }),
+
+        CSSLoader({
           use: [
             {
               loader: 'style-loader/useable',
@@ -91,16 +126,12 @@ function webpackConfig(environment) {
               loader: 'css-loader',
             },
           ],
-        },
-        {
-          test: /\.svelte$/,
-          exclude: /node_modules\/(?!(svero)\/).*/,
-          use: {
-            loader: 'svelte-loader'
-          }
-        },
+        }),
+
+        SvelteLoader(),
       ],
     },
+
     plugins: [
       createHTML({
         title: 'Meetup BandungJS #21',
@@ -117,6 +148,15 @@ function webpackConfig(environment) {
         skipWaiting: true,
       }),
     ],
+
+    resolve: {
+      alias: {
+        '@components': path.resolve(__dirname, 'src/components'),
+        '@config': path.resolve(__dirname, 'src/config'),
+        '@stores': path.resolve(__dirname, 'src/stores'),
+        '@assets': path.resolve(__dirname, 'src/assets'),
+      }
+    }
   }
 }
 
