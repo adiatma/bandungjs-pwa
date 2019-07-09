@@ -1,5 +1,6 @@
 <script>
   import { onMount } from 'svelte'
+  import { username } from './stores.js';
   import * as firebase from 'firebase/app'
   import 'firebase/auth'
   import 'firebase/database'
@@ -27,7 +28,6 @@
   // firebase.initializeApp(firebaseConfig)
   var database = firebase.database()
   let UniqueID = Math.random().toString(36).substring(7)
-  let username = prompt('Input your name : ')
 
   function writeScore(userId, name, current_score, high_score, user_agent, date) {
     firebase.database().ref('users/' + userId).set({
@@ -460,7 +460,7 @@
             SCORE_S.play()
             score.high_score = Math.max(score.value, score.high_score)
             localStorage.setItem('high_score', score.high_score)
-            writeScore(UniqueID, username, score.value, score.high_score, navigator.userAgent, getDate())            
+            writeScore(UniqueID, $username, score.value, score.high_score, navigator.userAgent, getDate())            
           }
         }
       },
@@ -542,8 +542,6 @@
       // sorting high_score (priority : high_score, current_score)
       temp = temp.sort((a, b) => (a.high_score < b.high_score) ? 1 : (a.high_score === b.high_score) ? 
         ((a.current_score < b.current_score) ? 1 : -1) : -1)
-      console.clear()
-      console.table(temp)
   })
  
 </script>
