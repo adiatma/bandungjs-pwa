@@ -1,11 +1,15 @@
 <script>
   import { onMount } from 'svelte'
   import { navigateTo } from 'svero'
-  import { username, hasKey } from '@stores';
+  import { username, lastKey, hasKey, isPlaying } from '@stores';
   import { database } from '@config/firebase.js'
 
-  let uniqueID = Math.random().toString(36).substring(7)
+  let uniqueID = $lastKey == null ?  Math.random().toString(36).substring(7) : $lastKey
+  
+  console.table('UniqueID before : ', uniqueID)
+  lastKey.update(value => value = uniqueID)
 
+  console.table('UniqueID after : ', uniqueID)
   // check username is exists
   if($username == null){
     $username = prompt('Input your name : ')
@@ -117,7 +121,13 @@
       switch (state.current) {
         case state.getReady:
           state.current = state.game
-          BACKSOUND.play()
+
+          if($isPlaying){
+            BACKSOUND.play()
+            isPlaying.update(value => value = false)
+            console.log('isPlaying : ', $isPlaying)
+          }
+
           SWOOSHING.play()
           break
         case state.game:
@@ -530,7 +540,7 @@
   })
 
   let temp = []
-  $: currentRank = '-'
+  let tempRank = '-'
   
    // get score data
   let usersRef = database.ref('users')
@@ -550,12 +560,13 @@
         ((a.current_score < b.current_score) ? 1 : -1) : -1)
       temp.map((item, idx) => {
         if(item.unique_id == uniqueID){
-          currentRank = idx+1
+          tempRank = idx+1
           return
         }  
       })
 
   })
+  $: currentRank = tempRank
 </script>
 
 <style>
