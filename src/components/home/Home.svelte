@@ -2,11 +2,11 @@
   import { navigateTo } from 'svero'
   import { username } from '@stores';
   import { database } from '@config/firebase'
-  import { osFilter, getImageSource, cutText } from './utils'
+  import { osFilter, getImageSource, cutText, sorted } from './utils'
   
   const crowns = ['gold.png', 'silver.png', 'bronze.png']
   let temp = []
-  
+
    // get score data
   let usersRef = database.ref('users')
   usersRef.on('value', function(snapshot) {
@@ -14,20 +14,16 @@
     snapshot.forEach(function(childSnapshot) {
       let childData = childSnapshot.val()
       if(childData.current_score != undefined)
-        temp.push(childData)
+        temp = [...temp, childData]
     }) 
 
     // sorting high_score (priority : high_score, current_score)
-    temp = temp.sort((a, b) => (a.high_score < b.high_score) ? 1 : (a.high_score === b.high_score) ? 
-      ((a.current_score < b.current_score) ? 1 : -1) : -1)
+    temp = sorted(temp)
   })
 
-  function playGame(e){
+  function playGame() {
     $username = prompt('Input your name : ') 
-
-    if ($username) {
-      navigateTo('/game')
-    }
+    if ($username) navigateTo('/game')
   }
 </script>
 

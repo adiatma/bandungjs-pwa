@@ -22,3 +22,22 @@ export function osFilter(os){
 export function cutText(str){
   return (str ? str : '').substring(0, (str ? str : '').indexOf(")")+1)
 }
+
+/**
+ * @param {object} a 
+ * @param {object} b 
+ */
+function sortForHighScore(a, b) {
+  return (a.high_score < b.high_score) 
+    ? 1 
+    : (a.high_score === b.high_score) 
+      ? ((a.current_score < b.current_score) ? 1 : -1) 
+      : -1
+}
+
+/**
+ * @param {array} data 
+ */
+export function sorted(data) {
+  return data.sort(sortForHighScore)
+}
