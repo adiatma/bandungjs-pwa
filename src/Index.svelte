@@ -22,45 +22,126 @@
    // get score data
   let usersRef = database.ref('users')
   usersRef.on('value', function(snapshot) {
+      temp = []
       snapshot.forEach(function(childSnapshot) {
         let childData = childSnapshot.val()
-        temp.push(childData)
+        if(childData.current_score != undefined)
+          temp.push(childData)
       }) 
 
       // sorting high_score (priority : high_score, current_score)
       temp = temp.sort((a, b) => (a.high_score < b.high_score) ? 1 : (a.high_score === b.high_score) ? 
         ((a.current_score < b.current_score) ? 1 : -1) : -1)
-      console.clear()
-      console.table(temp)
+
   })
+
+  function osFilter(os){
+    let image = new Image()
+    os = os.includes('Android') ? 'android' : 'ios'
+    image.src = require(`./assets/images/${os}.png`)
+    image.title = os
+    return `<img src="${image.src}" title="${image.title}" alt="${image.title}" width="20px"  />`
+  }
+  
+  function cutText(str){
+    return (str ? str : '').substring(0, (str ? str : '').indexOf(")")+1)
+  }
 </script>
+<style>
+  * {
+    padding: 0;
+    margin: 0;
+  }
+  
+  .container{
+    background: #0b2d53;
+    min-height: 100vh;
+    font-family: 'Roboto';
+    color: white;
+    overflow: hidden;
+    padding: 15px;
+  }
+  .helmet{
+    height: 40px;
+    display: flex;
+    justify-content: start;
+    padding: 10px 0;
+    text-decoration: none;
+  }
+  .table{
+    width: 100%;
+    background: #0b2d53;
+    color: white;
+  }
+  .table th{
+    text-transform: uppercase;
+    color: #caecee;
+    font-weight: bold;
+    padding: 5px;
+  }
+  .table tr{
+    margin: 3px 0;
+  }
 
-<Link href="/game">Go to game!</Link>
+  .table td{
+    background-color: #0e3964;
+    padding: 5px;
+  }
+  .table td:first-child{
+    margin-right: 3px;
+    text-align: center;
+  }
+  .table td small{
+    color: #84aebf;
+    text-overflow: ellipsis;
+  }
+  .text-center{
+    text-align: center;
+  }
+  .bold{
+    font-weight: bold;
+  }
+  .btn-play{
+    color: white;
+    text-decoration: none;
+    border: 1px solid white;
+    border-radius: 5px;
+    padding: 8px 10px;
+  }
+</style>
 
-{#if temp.length > 0}
-  <table>
-    <thead>
-      <tr>
-        <th>username</th>
-        <th>current_score</th>
-        <th>high_score</th>
-        <th>user agent</th>
-        <th>os</th>
-      </tr>
-    </thead>
-    <tbody>
-      {#each temp as t}
+<div class="container">
+  <div class="helmet">
+    <Link href="/game"><div class="btn-play">Play Game</div></Link>
+  </div>
+ 
+  {#if temp.length > 0}
+    <table class="table">
+      <thead>
         <tr>
-          <td>{t.username}</td>
-          <td>{t.current_score}</td>
-          <td>{t.high_score}</td>
-          <td>{t.user_agent}</td>
-          <td>{t.os}</td>
+          <th>Rank</th>
+          <th colspan="2">Player</th>
+          <th>Current Score</th>
+          <th>High Score</th>
         </tr>
-      {/each}
-    </tbody>
-  </table>
-{:else}
-  <p>Please wait a minutes...</p>
-{/if}
+      </thead>
+      <tbody>
+        {#each temp as t, idx}
+          <tr>
+            <td>{idx+=1}</td>
+            <td class="text-center">{@html osFilter(t.user_agent != undefined ? t.user_agent : '-')}</td>
+            <td>
+              <div>{t.username}</div>
+              <small>{cutText(t.user_agent)}</small>
+            </td>
+            <td class="text-center bold">{t.current_score}</td>
+            <td class="text-center bold">{t.high_score}</td>
+          </tr>
+        {/each}
+      </tbody>
+    </table>
+  {:else}
+    <p>Please wait a seconds...</p>
+  {/if}
 
+</div>
