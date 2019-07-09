@@ -2,13 +2,11 @@ import * as firebase from 'firebase/app'
 import 'firebase/database'
 
 const firebaseConfig = {
-  apiKey: process.env.API_KEY,
-  authDomain: process.env.AUTH_DOMAIN,
-  databaseURL: process.env.DATABASE_URL,
-  projectId: process.env.PROJECT_ID,
-  storageBucket: '',
-  messagingSenderId: process.env.MESSAGING_SENDER_ID,
-  appId: process.env.APP_ID,
+  apiKey: 'AIzaSyCpPOYISxSTRudgw1P6ttXTyMZDrpGWp6A',
+  authDomain: 'bandungjs-c3782.firebaseapp.com',
+  databaseURL: 'https://bandungjs-c3782.firebaseio.com',
+  projectId: 'bandungjs-c3782',
+  appId: '1:1085804661670:web:e9dbd4949057ccf2',
 }
 
 firebase.initializeApp(firebaseConfig)
