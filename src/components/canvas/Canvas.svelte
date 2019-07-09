@@ -5,11 +5,8 @@
   import { database } from '@config/firebase.js'
 
   let uniqueID = $lastKey == null ?  Math.random().toString(36).substring(7) : $lastKey
-  
-  console.table('UniqueID before : ', uniqueID)
   lastKey.update(value => value = uniqueID)
 
-  console.table('UniqueID after : ', uniqueID)
   // check username is exists
   if($username == null){
     $username = prompt('Input your name : ')
@@ -125,7 +122,6 @@
           if($isPlaying){
             BACKSOUND.play()
             isPlaying.update(value => value = false)
-            console.log('isPlaying : ', $isPlaying)
           }
 
           SWOOSHING.play()
@@ -194,7 +190,7 @@
       sX: 277,
       sY: 0,
       w: 222,
-      h: 112,
+      h: 104,
       x: -222,
       y: CANVAS_HEIGHT - 112,
 
@@ -210,7 +206,7 @@
           this.x,
           this.y,
           320,
-          this.h,
+          this.h+8,
         )
         ctx.drawImage(
           createImage(),
@@ -221,7 +217,7 @@
           this.x + 320,
           this.y,
           320,
-          this.h,
+          this.h+8,
         )
       },
 
@@ -446,6 +442,7 @@
             dragon.y + dragon.radius > p.y &&
             dragon.y - dragon.radius < p.y + this.h
           ) {
+            console.log('[collided] top obstacles')
             state.current = state.over
             HIT.play()
           }
@@ -455,6 +452,7 @@
             dragon.y + dragon.radius > bottomObstacleYPos &&
             dragon.y - dragon.radius < bottomObstacleYPos + this.h
           ) {
+            console.log('[collided] bottom obstacles')
             state.current = state.over
             HIT.play()
           }
@@ -490,14 +488,14 @@
 
         if (state.current == state.game) {
           ctx.lineWidth = 1
-          ctx.font = '35px Roboto'
+          ctx.font = 'bold 35px Arial'
           ctx.fillText(this.value, CANVAS_WIDTH / 2, 50)
           ctx.strokeText(this.value, CANVAS_WIDTH / 2, 50)
         } else if (state.current == state.over) {
           gameOver.drawBackground()
           gameOver.draw()
 
-          ctx.font = '25px Roboto'
+          ctx.font = '25px Arial'
           ctx.fillText(this.value, 170, 180)
           ctx.fillText(this.high_score, 170, 215)
         }
@@ -593,7 +591,7 @@
     background-color: #7a400d;
     font-size: 12px;
     border-radius: 2px;
-    padding: 3px;
+    padding: 3px 5px;
   }
 </style>
 <div class="helmet">
