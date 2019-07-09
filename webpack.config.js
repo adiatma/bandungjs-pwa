@@ -2,6 +2,7 @@ const path = require('path')
 const HTMLWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const {GenerateSW} = require('workbox-webpack-plugin')
+const Dotenv = require('dotenv-webpack')
 
 /**
  * @param {string} filename
@@ -147,6 +148,8 @@ function webpackConfig(environment) {
       new GenerateSW({
         skipWaiting: true,
       }),
+
+      new Dotenv(),
     ],
 
     resolve: {
