@@ -6,6 +6,7 @@
   
   const crowns = ['gold.png', 'silver.png', 'bronze.png']
   let temp = []
+  $: participants = 0
 
    // get score data
   let usersRef = database.ref('users')
@@ -19,6 +20,7 @@
 
     // sorting high_score (priority : high_score, current_score)
     temp = sorted(temp)
+    participants = temp.length
   })
 
   function playGame() {
@@ -54,12 +56,24 @@
     padding: 10px 0;
     text-decoration: none;
   }
+
+  .helmet-accesories > .helmet-title {
+    color: white;
+    padding: 5px 10px;
+  }
+
+  .accessories {
+    font-size: 14px;
+    padding: 5px 10px;
+    color: #84aebf;
+  }
+
+  .accessories strong {
+    color: #caecee;
+  }
+
   .armour {
     overflow-x: scroll;
-  }
-  .helmet > .helmet-title {
-    color: white;
-    padding: 10px;
   }
 
   .table {
@@ -90,11 +104,11 @@
     border-bottom: 3px solid #0b2d53;
   }
 
-  .table tr.active{
+  .table tr.active {
     background-color: #2980b9;
   }
   
-  .table tr.active small{
+  .table tr.active small {
     color: #ecf0f1;
   }
 
@@ -113,15 +127,16 @@
     font-size: 12px;
   }
 
-  .text-center{
+  .text-center {
     text-align: center;
   }
 
-  .bold{
+  .bold {
     font-weight: bold;
   }
 
   .btn-play {
+    outline: none;
     color: white;
     text-decoration: none;
     border: 1px solid white;
@@ -139,6 +154,21 @@
     margin-right: 5px;
     width: 20px;
   }
+
+  @media only screen and (max-width: 360px) {
+    .table {
+      font-size: 12px;
+    }
+    .table th {
+      font-size: 10px;
+    }
+    .table td small {
+      font-size: 10px;
+    }
+    .crowns {
+      width: 12px;
+    }
+  }
 </style>
 
 <div class="container">
@@ -148,7 +178,10 @@
     {:else}
       <div class="btn-play" on:click={playGame}>Back to Game</div>
     {/if}
-    <label class="helmet-title">#21 BandungJS</label>
+    <div class="helmet-accesories">
+      <label class="helmet-title">#21 BandungJS</label>
+      <div class="accessories"><strong>{participants}</strong> participant(s)</div>
+    </div>
   </div>
   <div class="armour">
     {#if temp.length >= 0}
