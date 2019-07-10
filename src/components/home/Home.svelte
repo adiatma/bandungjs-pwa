@@ -151,7 +151,7 @@
     <label class="helmet-title">#21 BandungJS</label>
   </div>
   <div class="armour">
-    {#if temp.length > 0}
+    {#if temp.length >= 0}
       <table class="table">
         <thead>
           <tr>
@@ -162,29 +162,35 @@
           </tr>
         </thead>
         <tbody>
-          {#each temp as t, idx}
-            <tr class:active="{t.unique_id === $hasKey}" >
-              <td>
-                <div class="crowns-container">
-                  {#if (idx < 3) }
-                    <img class="crowns" src="{getImageSource(crowns[idx])}" alt="crown"/>
-                  {/if}
-                  {idx+1}
-                </div>
-              </td>
-              <td class="text-center">{@html osFilter(t.user_agent != undefined ? t.user_agent : '-')}</td>
-              <td>  
-                <div>{t.username}</div>
-                <small>{cutText(t.user_agent)}</small>
-              </td>
-              <td class="text-center bold">{t.current_score}</td>
-              <td class="text-center bold">{t.high_score}</td>
+          {#if temp.length == 0}
+            <tr>
+              <td colspan="5">no participant(s)</td>
             </tr>
-          {/each}
+          {:else}
+            {#each temp as t, idx}
+              <tr class:active="{t.unique_id === $hasKey}" >
+                <td>
+                  <div class="crowns-container">
+                    {#if (idx < 3) }
+                      <img class="crowns" src="{getImageSource(crowns[idx])}" alt="crown"/>
+                    {/if}
+                    {idx+1}
+                  </div>
+                </td>
+                <td class="text-center">{@html osFilter(t.user_agent != undefined ? t.user_agent : '-')}</td>
+                <td>  
+                  <div>{t.username}</div>
+                  <small>{cutText(t.user_agent)}</small>
+                </td>
+                <td class="text-center bold">{t.current_score}</td>
+                <td class="text-center bold">{t.high_score}</td>
+              </tr>
+            {/each}
+          {/if}
         </tbody>
       </table>
     {:else}
-      <p>Please wait a seconds...</p>
+      <p>Please wait a few seconds...</p>
     {/if}
   </div>
 </div>
